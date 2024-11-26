@@ -110,7 +110,21 @@ extern int daemon(int, int);
 #include "sysemu/os-posix.h"
 #endif
 
+#ifdef __cplusplus
+extern "C++" {
+#endif
+
+/* 
+* this needs to be extern "C++" as it includes glib.h which will not compile in
+* later glibc versions in an extern "C" block, which this header might be
+* included in.
+*/
 #include "glib-compat.h"
+
+#ifdef __cplusplus
+} /* extern "C++" */
+#endif
+
 #include "qemu/typedefs.h"
 
 #ifndef O_LARGEFILE
