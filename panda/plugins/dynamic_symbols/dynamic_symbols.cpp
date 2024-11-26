@@ -11,8 +11,13 @@ PANDAENDCOMMENT */
 // the PRIx64 macro
 #define __STDC_FORMAT_MACROS
 
-#include <linux/elf.h>
-#include <linux/auxvec.h>
+// elf.h uses this, important it comes first
+#include <cstdint>
+
+extern "C" {
+#include "elf.h"
+}
+
 #include <iostream> 
 #include <vector>
 #include <string>
