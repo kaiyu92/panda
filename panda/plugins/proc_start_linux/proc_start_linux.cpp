@@ -11,7 +11,7 @@ PANDAENDCOMMENT */
 // the PRIx64 macro
 #define __STDC_FORMAT_MACROS
 
-#include <linux/auxvec.h>
+#include "panda/linux_headers/auxvec.h"
 #include <string>
 #include "panda/plugin.h"
 #include "panda/plugin_plugin.h"
