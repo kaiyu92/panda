@@ -736,7 +736,16 @@ Darwin)
   bsd="yes"
   darwin="yes"
   hax="yes"
-  LDFLAGS_SHARED="-bundle -undefined dynamic_lookup"
+  # HACK: macOS uses .dylib for shared libraries linked using the linker.
+  # ".so" is usually used for 'bundle' type libraries which are used for plugins.
+  # For panda plugins .so makes sense while for other things in the qemu build
+  # process .dylib makes sense. To simplify the changes required to make this
+  # work we use a .so in any case. We also compile shared libraries as dylibs
+  # instead of bundles as dylibs provide a superset of the capabilities of
+  # bundles (for our purposes).
+  DSOSUF=".so"
+  # -dynamiclib instead of -bundle is required when building dtc (at least).
+  LDFLAGS_SHARED="-dynamiclib -undefined dynamic_lookup"
   if [ "$cpu" = "x86_64" ] ; then
     QEMU_CFLAGS="-arch x86_64 $QEMU_CFLAGS"
     LDFLAGS="-arch x86_64 $LDFLAGS"
