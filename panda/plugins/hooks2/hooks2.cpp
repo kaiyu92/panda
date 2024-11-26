@@ -31,6 +31,11 @@ PANDAENDCOMMENT */
 
 #define MAX_PATHNAME 256
 
+// from uapi/linux/sched.h
+#define CLONE_VM	    0x00000100
+#define CLONE_VFORK	    0x00004000
+#define CLONE_THREAD	0x00010000
+
 extern "C" {
 bool init_plugin(void *);
 void uninit_plugin(void *);
