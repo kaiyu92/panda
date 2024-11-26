@@ -12,6 +12,8 @@ PANDAENDCOMMENT */
 #include <algorithm>
 #include <string>
 #include <iostream>
+// for DBL_MANT_DIG and LDBL_MANT_DIG
+#include <cfloat>
 
 #include "dwarf_query.h"
 
@@ -467,12 +469,16 @@ std::pair<bool, PrimitiveVariant> read_member(CPUState *env, target_ulong addr, 
                             result = std::make_pair(true, prim_var);
                         }
                         break;
+                    #if DBL_MANT_DIG < LDBL_MANT_DIG
                     case sizeof(long double):
                         {
                             PrimitiveVariant prim_var(std::in_place_type<long double>, *buf);
                             result = std::make_pair(true, prim_var);
                         }
                         break;
+                    #else
+                    #warning "wide long double type not supported on this host. dwarf query won't have support for it."   
+                    #endif
                     default:
                         std::cerr << "[WARNING] dwarf_query: cannot virt read float member \'" << rdt.name << "\', bad size!" << std::endl;
                         result = std::make_pair(false, 0);
