@@ -203,6 +203,7 @@ static inline tcg_target_ulong cpu_tb_exec(CPUState *cpu, TranslationBlock *itb)
     // NB: This is where we did this in panda1
     panda_bb_invalidate_done = false;
 
+    qemu_thread_jit_execute();
 #if defined(CONFIG_LLVM)
     if (execute_llvm) {
         assert(itb->llvm_tc_ptr);

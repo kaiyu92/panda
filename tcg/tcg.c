@@ -394,6 +394,7 @@ void tcg_prologue_init(TCGContext *s)
     s->code_buf = buf0;
     s->code_gen_prologue = buf0;
 
+    qemu_thread_jit_write();
     /* Generate the prologue.  */
     tcg_target_qemu_prologue(s);
     buf1 = s->code_ptr;

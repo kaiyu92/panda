@@ -765,6 +765,11 @@ static inline void *alloc_code_gen_buffer(void)
 #  endif
 # endif
 
+#ifdef CONFIG_DARWIN
+    // required to get RWX pages on macOS
+    flags |= MAP_JIT;
+#endif
+
     buf = mmap((void *)start, size + qemu_real_host_page_size,
                PROT_NONE, flags, -1, 0);
     if (buf == MAP_FAILED) {
@@ -1146,7 +1151,8 @@ void tb_phys_invalidate(TranslationBlock *tb, tb_page_addr_t page_addr)
     tb_page_addr_t phys_pc;
 
     assert_tb_locked();
-
+    qemu_thread_jit_write();
+    
     atomic_set(&tb->invalid, true);
 
     /* remove the TB from the hash list */
@@ -1182,6 +1188,7 @@ void tb_phys_invalidate(TranslationBlock *tb, tb_page_addr_t page_addr)
     tb_jmp_unlink(tb);
 
     tcg_ctx.tb_ctx.tb_phys_invalidate_count++;
+    qemu_thread_jit_execute();
 }
 
 #ifdef CONFIG_SOFTMMU
@@ -1319,6 +1326,7 @@ TranslationBlock *tb_gen_code(CPUState *cpu,
     int64_t ti;
 #endif
     assert_memory_lock();
+    qemu_thread_jit_write();
 
     phys_pc = get_page_addr_code(env, pc);
     if (use_icount && !(cflags & CF_IGNORE_ICOUNT)) {

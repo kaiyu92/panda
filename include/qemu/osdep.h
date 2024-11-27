@@ -110,6 +110,10 @@ extern int daemon(int, int);
 #include "sysemu/os-posix.h"
 #endif
 
+#ifdef __APPLE__
+#include <AvailabilityMacros.h>
+#endif
+
 #ifdef __cplusplus
 extern "C++" {
 #endif
@@ -119,6 +123,7 @@ extern "C++" {
 * later glibc versions in an extern "C" block, which this header might be
 * included in.
 */
+
 #include "glib-compat.h"
 
 #ifdef __cplusplus
@@ -488,6 +493,26 @@ char *qemu_get_pid_name(pid_t pid);
 pid_t qemu_fork(Error **errp);
 void panda_set_library_mode(bool);
 bool panda_get_library_mode(void);
+
+/*
+ * Toggle write/execute on the pages marked MAP_JIT
+ * for the current thread.
+ */
+#if defined(MAC_OS_VERSION_11_0) && \
+    MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_VERSION_11_0
+static inline void qemu_thread_jit_execute(void)
+{
+    pthread_jit_write_protect_np(true);
+}
+
+static inline void qemu_thread_jit_write(void)
+{
+    pthread_jit_write_protect_np(false);
+}
+#else
+static inline void qemu_thread_jit_write(void) {}
+static inline void qemu_thread_jit_execute(void) {}
+#endif
 
 #endif
 
