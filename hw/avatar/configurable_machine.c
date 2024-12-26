@@ -476,7 +476,7 @@ static THISCPU *create_cpu(MachineState * ms, QDict *conf)
     if (qdict_haskey(conf, "cpu_model"))
     {
         cpu_model = qdict_get_str(conf, "cpu_model");
-        g_assert(cpu_model);6
+        g_assert(cpu_model);
     }
 
 #if defined(TARGET_ARM)
