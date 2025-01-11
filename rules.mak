@@ -21,7 +21,7 @@ MAKEFLAGS += -rR
 clean-target:
 
 # Additional C++ flags. Note that QEMU_CFLAGS have already been appended by configure.
-QEMU_CXXFLAGS += -Wno-sign-compare -std=c++11 -fPIC -fpermissive
+QEMU_CXXFLAGS += -Wno-sign-compare -std=c++17 -fPIC -fpermissive
 
 # Flags for dependency generation
 QEMU_DGFLAGS += -MMD -MP -MT $@ -MF $(@D)/$(*F).d
