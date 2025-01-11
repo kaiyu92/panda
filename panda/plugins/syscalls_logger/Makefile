@@ -9,4 +9,4 @@ SYSCALLS_LOGGER_SRC  = $(notdir $(wildcard $(PLUGIN_SRC_DIR)/*.cpp))
 SYSCALLS_LOGGER_OBJ  = $(patsubst %.cpp,$(PLUGIN_OBJ_DIR)/%.o,$(SYSCALLS_LOGGER_SRC))
 
 # The main rule for your plugin. List all object-file dependencies.
-$(PLUGIN_TARGET_DIR)/panda_$(PLUGIN_NAME).so: $(SYSCALLS_LOGGER_OBJ)
+# $(PLUGIN_TARGET_DIR)/panda_$(PLUGIN_NAME)$(DSOSUF): $(SYSCALLS_LOGGER_OBJ)

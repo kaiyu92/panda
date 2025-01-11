@@ -25,6 +25,13 @@ uint32_t guest_strncpy(CPUState *cpu, char *buf, size_t maxlen, target_ulong gue
 }
 */
 
+struct Dwarf_Loc {
+    Dwarf_Small lr_atom;		/* Operation */
+    Dwarf_Unsigned lr_number;		/* Operand */
+    Dwarf_Unsigned lr_number2;		/* Possible second operand */
+    Dwarf_Unsigned lr_offset;		/* Offset in location expression */
+};
+
 // util functions to read DW_OP char array
 const unsigned char *
 read_uleb128 (const unsigned char *p, target_ulong *val)
