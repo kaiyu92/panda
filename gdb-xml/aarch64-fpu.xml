@@ -49,7 +49,7 @@
     <field name="b" type="vnb"/>
     <field name="q" type="vnq"/>
   </union>
-  <reg name="v0" bitsize="128" type="aarch64v" regnum="34"/>
+  <reg name="v0" bitsize="128" type="aarch64v"/>
   <reg name="v1" bitsize="128" type="aarch64v" />
   <reg name="v2" bitsize="128" type="aarch64v" />
   <reg name="v3" bitsize="128" type="aarch64v" />

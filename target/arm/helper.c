@@ -5254,6 +5254,24 @@ ARMCPU *cpu_arm_init(const char *cpu_model)
     return ARM_CPU(cpu_generic_init(TYPE_ARM_CPU, cpu_model));
 }
 
+static int debug_pseudo_gdb_get_reg(CPUARMState *env, uint8_t *buf, int reg)
+{
+    switch(reg){
+    case 0:
+        stb_p(buf, env->aarch64); return 1;
+    }
+    return 0;
+}
+
+static int debug_pseudo_gdb_set_reg(CPUARMState *env, uint8_t *buf, int reg)
+{
+    switch(reg){
+    case 0:
+        env->aarch64 = ldub_p(buf); return 1;
+    }
+    return 0;
+}
+
 void arm_cpu_register_gdb_regs_for_features(ARMCPU *cpu)
 {
     CPUState *cs = CPU(cpu);
@@ -5263,6 +5281,9 @@ void arm_cpu_register_gdb_regs_for_features(ARMCPU *cpu)
         gdb_register_coprocessor(cs, aarch64_fpu_gdb_get_reg,
                                  aarch64_fpu_gdb_set_reg,
                                  34, "aarch64-fpu.xml", 0);
+        gdb_register_coprocessor(cs, debug_pseudo_gdb_get_reg,
+                                 debug_pseudo_gdb_set_reg,
+                                 1, "aarch64-debug-pseudo.xml", 0);
     } else if (arm_feature(env, ARM_FEATURE_NEON)) {
         gdb_register_coprocessor(cs, vfp_gdb_get_reg, vfp_gdb_set_reg,
                                  51, "arm-neon.xml", 0);
