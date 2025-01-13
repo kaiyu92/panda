@@ -2,14 +2,16 @@
 #define AVATAR_POSIX_H
 
 #include <semaphore.h>
-#include <mqueue.h>
+#include <stdbool.h>
+// #include <mqueue.h>
 
 typedef struct {
     sem_t *sem;
 } QemuAvatarSemaphore;
 
 typedef struct {
-    mqd_t mq;
+    // mqd_t mq;
+    int sock_fd;
 } QemuAvatarMessageQueue;
 
 void qemu_avatar_sem_wait(QemuAvatarSemaphore *sem);
