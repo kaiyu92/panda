@@ -1296,6 +1296,15 @@ MemTxResult memory_region_dispatch_read(MemoryRegion *mr,
         // If so, return MEMTX_OK despite the invalid access
         // Either way, assign pval to the result (seems strange, but otherwise tests fail)
 
+        /* BSL change: log incorrect reads, even when there might be a PANDA
+         plugin backing it. We don't use PANDA plugins explicitly, and if
+         something lower level is using it, we still want to see errors for
+         now. This will help us see where peripherals might be. */
+        
+        qemu_log_mask(LOG_GUEST_ERROR,
+            "[ERROR] Firmwire: QEMU read bad memory at 0x%" HWADDR_PRIx "!\n",
+            addr);
+
         bool changed = false;
         *pval = _unassigned_mem_read(mr, addr, size, &changed);
 
@@ -1349,6 +1358,14 @@ MemTxResult memory_region_dispatch_write(MemoryRegion *mr,
                                          MemTxAttrs attrs)
 {
     if (!memory_region_access_valid(mr, addr, size, true)) {
+        /* BSL change: log incorrect writes, even when there might be a PANDA
+         plugin backing it. We don't use PANDA plugins explicitly, and if
+         something lower level is using it, we still want to see errors for
+         now. This will help us see where peripherals might be. */
+        
+        qemu_log_mask(LOG_GUEST_ERROR,
+            "[ERROR] Firmwire: QEMU wrote bad memory at 0x%" HWADDR_PRIx "!\n",
+            addr);
         if (_unassigned_mem_write(mr, addr, data, size)) {
             // A PANDA callback wants to pretend this write is OK
             return MEMTX_OK;
