@@ -3,15 +3,15 @@
 
 #include <semaphore.h>
 #include <stdbool.h>
-// #include <mqueue.h>
+#include <mqueue.h>
 
 typedef struct {
     sem_t *sem;
 } QemuAvatarSemaphore;
 
 typedef struct {
-    // mqd_t mq;
-    int sock_fd;
+    mqd_t mq;
+    // int sock_fd;
 } QemuAvatarMessageQueue;
 
 void qemu_avatar_sem_wait(QemuAvatarSemaphore *sem);
